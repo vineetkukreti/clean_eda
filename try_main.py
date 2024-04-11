@@ -378,6 +378,14 @@ class Data_Preprocess():
         X_test.to_csv(f'X_test.csv', index=False)
         y_test_encoded.to_csv(f'y_test.csv', index=False)
 
+        print("9999999999999999999999999999999999999999")
+        current_file_path = os.path.abspath(__file__)
+        # Navigate to the parent directory (one level up)
+        project_directory = os.path.dirname(current_file_path)
+
+        # Now you're in the project directory
+        print("Project directory:", project_directory)
+        print("9999999999999999999999999999999999999999")
         logging.info("Preprocessing Done!!!")
         print("Preprocessing Done!!!")
 

@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request, send_file, redirect
 import pandas as pd
+import dtale
 from try_main import Data_Preprocess
 from dtale.app import build_app
 from dtale.views import startup
 import os
 
 app = Flask(__name__)
-
+app1 = build_app(reaper_on=False)
 name = ''
 
 @app.route('/')
@@ -50,13 +51,22 @@ def read_log_file(log_file_path):
     except Exception as e:
         return f"Error reading log file: {str(e)}"
 
-@app.route('/logs')
+# @app.route('/logs')
+# def show_logs():
+#     global name
+#     if not name:
+#         return "Name parameter not provided"
+#     log_content = read_log_file(f"{name}_logfile.log")
+#     return render_template('log.html', content=log_content)
+
+@app.route('/logs')  # Remove the question mark from here
 def show_logs():
     global name
     if not name:
         return "Name parameter not provided"
     log_content = read_log_file(f"{name}_logfile.log")
     return render_template('log.html', content=log_content)
+
 
 @app.route('/download/<filename>')
 def download(filename):
@@ -69,9 +79,11 @@ def create_df():
     print("**************eda****************")
     print(current_directory)
     df = pd.read_csv('eda.csv')
-    instance = startup(data=df, ignore_duplicate=True)
-    return redirect(f"/dtale/main/{instance._data_id}", code=302)
+    d = dtale.show(df)
+    d.open_browser()
+    # d.kill()
+    return "dfd"
     
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=8080)
+    app.run(debug=True)
