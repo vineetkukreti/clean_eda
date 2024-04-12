@@ -4,19 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Preprocessing Tool</title>
+    <!-- Google Font - Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         /* Add your custom styles here */
+        body {
+            background: linear-gradient(45deg, #e66465, #9198e5);
+            font-family: 'Roboto', sans-serif; /* Applying Roboto font to the body */
+        }
+
+        .navbar {
+            background-color: #343a40; /* Dark background for navbar */
+        }
+
+        .navbar-brand {
+            color: #ffffff; /* White text for navbar brand */
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff !important; /* White text for navbar links */
+        }
+
         .card {
             margin-top: 50px; /* Adjust margin-top as needed */
             background-color: rgba(255, 255, 255, 0.8);
             border-radius: 15px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        body {
-            background: linear-gradient(45deg, #e66465, #9198e5);
         }
 
         .btn-primary {
@@ -30,9 +45,10 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    
+    <div class="container mt-4">
         <div class="row justify-content-center">
-            <div class="col-md-6">
+            <div class="col-md-8"> <!-- Increase column width for larger screens -->
                 <div class="card">
                     <div class="card-body">
                         <h1 class="card-title text-center">Data Preprocessing Tool</h1>

@@ -41,6 +41,12 @@
             <form action="/logs" method="get">
                 <button type="submit" class="btn btn-secondary mt-3">Show Log File</button>
             </form>
+            
+            <!-- Button to download files -->
+            <form action="/download" method="get">
+                <input type="hidden" name="folder_path" value="{{ name }}">
+                <button type="submit" class="btn btn-secondary mt-3">Download Files</button>
+            </form>
         </div>
     </div>
     <!-- Add Bootstrap JS (Optional, for certain Bootstrap components) -->

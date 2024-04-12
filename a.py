@@ -5,9 +5,16 @@ from try_main import Data_Preprocess
 from dtale.app import build_app
 from dtale.views import startup
 import os
+import zipfile
+from ydata_profiling import ProfileReport
+
+
 
 app = Flask(__name__)
 app1 = build_app(reaper_on=False)
+
+
+
 name = ''
 
 @app.route('/')
@@ -59,31 +66,67 @@ def read_log_file(log_file_path):
 #     log_content = read_log_file(f"{name}_logfile.log")
 #     return render_template('log.html', content=log_content)
 
-@app.route('/logs')  # Remove the question mark from here
+@app.route('/logs')
 def show_logs():
     global name
+    print("name : ",name)
     if not name:
-        return "Name parameter not provided"
+        return redirect('/')
     log_content = read_log_file(f"{name}_logfile.log")
     return render_template('log.html', content=log_content)
 
 
-@app.route('/download/<filename>')
-def download(filename):
-    file_path = filename  # Assuming the file path is correct
-    return send_file(file_path, as_attachment=True)
+ 
+def zip_folder(folder_path, output_path):
+    with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for root, dirs, files in os.walk(folder_path):
+            for file in files:
+                file_path = os.path.join(root, file)
+                zipf.write(file_path, os.path.relpath(file_path, folder_path))
+
+@app.route('/download')
+def download_folder():
+    global name
+    if not name:
+        return "Folder name not provided"
+    print("+++*******"+os.getcwd()+"**********++")
+    
+    folder_path = name  # Using the 'name' variable as the folder name
+    folder_path = folder_path.strip('/')
+    zip_output_path = f'{folder_path}.zip'  # Define the path for the zip file
+    print(f"********{folder_path}********")
+    print(f"********{zip_output_path}********")
+    print("+++*******"+os.getcwd()+"**********++")
+    try:
+        zip_folder(folder_path, zip_output_path)  # Create the zip file
+        return send_file(f"{name}/"+zip_output_path, as_attachment=True)  # Send the zip file for download
+    except FileNotFoundError:
+        return "Folder not found", 404
+
+
+
 
 @app.route("/show_eda")
 def create_df():
     current_directory = os.getcwd()
     print("**************eda****************")
     print(current_directory)
+    print(current_directory)
     df = pd.read_csv('eda.csv')
-    d = dtale.show(df)
-    d.open_browser()
-    # d.kill()
-    return "dfd"
+    profile = ProfileReport(df, title="Profiling Report")
+    filename = f"{name}_report.html"
+    profile.to_file(filename)
+    print(current_directory)
+    filename = f"{name}/{name}_report.html"
+    return send_file(filename)
     
+@app.route('/p')
+def project_directory():
+    # Define the path to your project directory
+    project_directory_path = '/'
+    # Redirect the user to the project directory
+    return redirect(project_directory_path)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
